@@ -29,3 +29,12 @@
 
 # Mac
 .DS_Store
+
+#Visual C++ files and folders
+Debug/
+ipch/
+*.opensdf
+*.sdf
+*.sln
+*.suo
+*.vcxproj*
