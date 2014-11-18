@@ -1,23 +1,20 @@
-#include <iostream>
+// Copyright 2014 Robert Horvath, Johannes Vogel
+#include <stdio.h>
 #include <string>
-
-
-#include "instance.h"
-
-using namespace std;
+#include "./instance.h"
 
 int main(int argc, char** argv) {
-	if (argc == 1) {
-		cout << "USAGE: " << argv[0] << " file" << endl;
-		return 0;
-	}
+    if (argc == 1) {
+        printf("USAGE: %s file\n", argv[0]);
+        return 0;
+    }
 
-	Instance* instance = ReadInstanceFile(argv[1]);
-	if (!instance) {
-		cerr << "The instance file could not be read: " << argv[1] << endl;
-		return 1;
-	}
+    Instance* instance = ReadInstanceFile(argv[1]);
+    if (!instance) {
+        fprintf(stderr, "The instance file could not be read: %s\n", argv[1]);
+        return 1;
+    }
 
-	instance->print_summary();
-	return 0;
+    instance->print_summary();
+    return 0;
 }

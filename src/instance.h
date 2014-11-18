@@ -1,5 +1,6 @@
-#ifndef TCBVRP_INSTANCE_H_
-#define TCBVRP_INSTANCE_H_
+// Copyright 2014 Robert Horvath, Johannes Vogel
+#ifndef SRC_INSTANCE_H_
+#define SRC_INSTANCE_H_
 #include <vector>
 
 /**
@@ -9,7 +10,7 @@
 class Instance {
     int *distances;
 
-    public:
+ public:
     int num_nodes;                  /// The number of nodes
     int num_vehicles;               /// The number of vehicles
     int time_limit;                 /// The time limit per vehicle
@@ -30,4 +31,4 @@ class Instance {
  */
 Instance* ReadInstanceFile(char* path);
 
-#endif  // TCBVRP_INSTANCE_H_
+#endif  // SRC_INSTANCE_H_
