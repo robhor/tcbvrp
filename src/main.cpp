@@ -1,8 +1,10 @@
 #include <iostream>
 #include <string>
-#include <fstream>
-using namespace std;
 
+
+#include "instance.h"
+
+using namespace std;
 
 int main(int argc, char** argv) {
 	if (argc == 1) {
@@ -10,13 +12,12 @@ int main(int argc, char** argv) {
 		return 0;
 	}
 
-	ifstream infile(argv[1]);
-	int nodes, timeLimit, vehicles;
-	infile >> nodes >> timeLimit >> vehicles;
-	
-	cout << "Nodes: \t" << nodes << endl;
-	cout << "Time Limit: \t" << timeLimit << endl;
-	cout << "Vehicles: \t" << vehicles << endl;
+	Instance* instance = ReadInstanceFile(argv[1]);
+	if (!instance) {
+		cerr << "The instance file could not be read: " << argv[1] << endl;
+		return 1;
+	}
 
+	instance->print_summary();
 	return 0;
 }
