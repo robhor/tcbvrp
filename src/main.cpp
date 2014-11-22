@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string>
 #include "./instance.h"
+#include "./solution.h"
+#include "./greedy.h"
 
 int main(int argc, char** argv) {
     if (argc == 1) {
@@ -16,5 +18,9 @@ int main(int argc, char** argv) {
     }
 
     instance->print_summary();
+
+    // Run the greedy heuristic
+    Solution* solution = greedy(instance);
+
     return 0;
 }

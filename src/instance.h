@@ -3,6 +3,8 @@
 #define SRC_INSTANCE_H_
 #include <vector>
 
+using std::vector;
+
 /**
  * Encapsulates information about a problem instance.
  * Immutable.
@@ -14,8 +16,8 @@ class Instance {
     int num_nodes;                  /// The number of nodes
     int num_vehicles;               /// The number of vehicles
     int time_limit;                 /// The time limit per vehicle
-    std::vector<int> supply_nodes;  /// A vector of supply nodes
-    std::vector<int> demand_nodes;  /// A vector of demand nodes
+    vector<int> supply_nodes;       /// A vector of supply nodes
+    vector<int> demand_nodes;       /// A vector of demand nodes
 
     ~Instance();
     void init();                    /// Allocates memory for distances matrix

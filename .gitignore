@@ -3,6 +3,8 @@
 *.lo
 *.o
 *.obj
+bin/
+build/
 
 # Precompiled Headers
 *.gch
@@ -26,6 +28,7 @@
 *.exe
 *.out
 *.app
+tcbvrp
 
 # Mac
 .DS_Store
