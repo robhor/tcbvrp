@@ -41,3 +41,7 @@ ipch/
 *.sln
 *.suo
 *.vcxproj*
+
+#CLion files and folders
+.idea
+CMakeLists.txt

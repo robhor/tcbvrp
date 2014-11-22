@@ -19,9 +19,9 @@ int Instance::get_distance(int from, int to) {
 }
 
 void Instance::print_summary() {
-    printf("Nodes:      %i\n", num_nodes);
-    printf("Time Limit: %i\n", time_limit);
-    printf("Vehicles:   %i\n", num_vehicles);
+    fprintf(stderr, "Nodes:      %i\n", num_nodes);
+    fprintf(stderr, "Time Limit: %i\n", time_limit);
+    fprintf(stderr, "Vehicles:   %i\n", num_vehicles);
 }
 
 Instance::~Instance() {

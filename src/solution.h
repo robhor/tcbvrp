@@ -12,12 +12,14 @@ typedef vector<int> Tour;
 /// Represents a solution for a TCBVRP instance
 class Solution {
  public:
- 	Instance* instance;            /// The instance this solution belongs to
-    vector<Tour> tours;            /// Vector of tours
+    Instance *instance;             /// The instance this solution belongs to
+    vector<Tour*> *tours;           /// Vector of tours
 
-    int get_cost();                /// Get the total cost of the solution
-    int get_tour_cost(int index);  /// Get the cost of the tour at the given index
-    int get_tour_cost(Tour tour);  /// Get the cost of the given tour
+    int get_cost();                 /// Get the total cost of the solution
+    int get_tour_cost(int index);   /// Get the cost of the tour at index
+    int get_tour_cost(Tour* tour);  /// Get the cost of the given tour
+
+    void print();                   /// Print solution to stdout
 };
 
 #endif  // SRC_SOLUTION_H_

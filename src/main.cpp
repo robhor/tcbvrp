@@ -21,6 +21,7 @@ int main(int argc, char** argv) {
 
     // Run the greedy heuristic
     Solution* solution = greedy(instance);
+    solution->print();
 
     return 0;
 }
