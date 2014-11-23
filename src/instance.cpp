@@ -11,11 +11,11 @@ void Instance::init() {
 }
 
 void Instance::set_distance(int from, int to, int distance) {
-    distances[from * num_nodes + to] = distance;
+    distances[from * (num_nodes+1) + to] = distance;
 }
 
 int Instance::get_distance(int from, int to) {
-    return distances[from * num_nodes + to];
+    return distances[from * (num_nodes+1) + to];
 }
 
 void Instance::print_summary() {
@@ -60,7 +60,7 @@ Instance* ReadInstanceFile(char* path) {
     i = 0;
     while (infile >> distance) {
         int from = i / (num_nodes + 1);
-        int to = i % (num_nodes + 1);
+        int to   = i % (num_nodes + 1);
         instance->set_distance(from, to, distance);
         i++;
     }

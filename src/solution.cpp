@@ -5,8 +5,12 @@ int Solution::get_tour_cost(Tour *tour) {
     int cost = 0;
     int tour_size = tour->size();
     for (int i = 0; i < tour_size - 1; i++) {
-        cost += instance->get_distance(tour->at(i), tour->at(i+1));
+        int from = tour->at(i);
+        int to   = tour->at(i+1);
+        int distance = instance->get_distance(from, to);
+        cost += distance;
     }
+    cost += instance->get_distance(tour->at(tour_size-1), 0);
     return cost;
 }
 
