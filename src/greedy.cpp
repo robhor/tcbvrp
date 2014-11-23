@@ -57,6 +57,11 @@ bool greedy_extend_tour(partial_tour *pt) {
     int demand_node =
         nearest_node(pt, supply_node, pt->instance->demand_nodes);
 
+    if (demand_node == 0) {
+        // No demand nodes left
+        return false;
+    }
+
     int demand_cost = pt->instance->get_distance(supply_node, demand_node);
     int return_cost = pt->instance->get_distance(demand_node, 0);
 
@@ -88,7 +93,6 @@ Solution* greedy(Instance* instance) {
     while (num_used_nodes < instance->num_nodes + 1) {
         int prev_num_used_nodes = num_used_nodes;
         Tour* tour = new Tour();
-        solution->tours->push_back(tour);
         tour->push_back(0);
 
         partial_tour pt;
@@ -98,6 +102,9 @@ Solution* greedy(Instance* instance) {
         pt.length = 0;
 
         while (greedy_extend_tour(&pt)) {}
+        if (pt.tour->size() > 1) {
+            solution->tours->push_back(tour);
+        }
 
         num_used_nodes = used_nodes.size();
         if (prev_num_used_nodes >= num_used_nodes) break;
