@@ -1,4 +1,7 @@
-tcbvrp
+Time-Constrained Bipartite Vehicle Routing Problem
 ======
 
-Time-Constrained Vehicle Routing Problem
+A full explanation of the TCBVRP can be found in the [Problem Statement](ProblemStatement.pdf).
+
+The TCBVRP considers the following situation:
+Suppose you are part of a team organizing a large-scale Christmas charity event. Your aim is to supply a number of care facilities (e.g. orphanages, nursing homes, etc.) with Christmas dinner. To this end you were able to gather a number of suppliers (e.g. company cafeterias, hotel kitchens, etc.) through extensively advertising and promoting your event. Furthermore, you have a certain number of vehicles for delivering the meals to the care facilities at your disposal. Because of the expected rather large number of prepared meals that need to be delivered to each care facility, each vehicle can only transport exactly one batch of meals from a supplier to one facility. Due to the common generosity around the Christmas season (and the possible prospect of positive publicity) you could convince even more suppliers than necessary to provide meals to all the considered care facilities. In order to guarantee that no facility has to wait too long for the delivery you are given a time limit within which all deliveries must be finished. Furthermore, since you and your co-workers are planning to also enjoy the holiday yourselves, you want to finish the distribution as fast as possible. Hence, you are now faced with the problem of efficiently delivering the meals from the suppliers to the care facilities, i.e. you need to decide on the suppliers you choose and on the routes for the vehicles s.t. all care facilities receive their meals as fast as possible.
