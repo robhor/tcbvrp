@@ -1,5 +1,6 @@
 // Copyright 2014 Robert Horvath, Johannes Vogel
 #include "./solution.h"
+#include <stdio.h>
 
 int Solution::get_tour_cost(Tour *tour) {
     int cost = 0;
