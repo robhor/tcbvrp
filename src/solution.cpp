@@ -1,6 +1,7 @@
 // Copyright 2014 Robert Horvath, Johannes Vogel
 #include "./solution.h"
 #include <stdio.h>
+#include <vector>
 
 Solution::Solution() {
     length = 0;
@@ -41,5 +42,14 @@ void Solution::print() {
 }
 
 Solution* Solution::clone() {
-    return NULL;
+    Solution* solution = new Solution;
+    solution->instance = instance;
+    solution->tours = new vector<Tour*>;
+    solution->length = length;
+
+    for (auto tour : *tours) {
+        solution->tours->push_back(new Tour(tour->begin(), tour->end()));
+    }
+
+    return solution;
 }
