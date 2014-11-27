@@ -1,5 +1,6 @@
 // Copyright 2014 Robert Horvath, Johannes Vogel
 #include "./solution.h"
+#include <stdio.h>
 
 Solution::Solution() {
     length = 0;
