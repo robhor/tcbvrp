@@ -6,6 +6,7 @@
 
 class NodeSwapper {
     Solution* currentSolution;
+    Solution* solution;
     int i, j;
 
  public:

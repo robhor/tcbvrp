@@ -4,6 +4,7 @@
 #include "./instance.h"
 #include "./solution.h"
 #include "./greedy.h"
+#include "./nodeSwapper.h"
 
 int main(int argc, char** argv) {
     if (argc == 1) {
@@ -22,6 +23,9 @@ int main(int argc, char** argv) {
     // Run the greedy heuristic
     Solution* solution = greedy(instance);
     solution->print();
+
+    // swap nodes heuristic
+    NodeSwapper ns(solution);
 
     return 0;
 }
