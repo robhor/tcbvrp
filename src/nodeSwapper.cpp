@@ -2,43 +2,50 @@
 #include "./nodeSwapper.h"
 #include <stdio.h>
 
-int get_nth_node(Solution* solution, int n) {
-    for (auto tour : *solution->tours) {
-        int tour_size = tour->size();
-        if (n < tour_size) {
-            return tour->at(n);
-        } else {
-            n -= tour_size;
-        }
-    }
-    return -1;
+void swap_nodes(Solution* solution, int i, int j) {
+    int node_i = solution->node_at(i);
+    int node_j = solution->node_at(j);
+
+    solution->replace_node_at(i, node_j);
+    solution->replace_node_at(j, node_i);
 }
 
 NodeSwapper::NodeSwapper(Solution* solution) {
     currentSolution = solution;
-    this->solution = solution->clone();
+    num_nodes = currentSolution->instance->demand_nodes.size() * 2;
     i = 0;
     j = 0;
 }
 
-Solution* NodeSwapper::next() {
-    // increment
-    j = (j+1) % (currentSolution->instance->num_nodes);
-    if (j == 0) i++;
+void NodeSwapper::accept() {
+    i = 0;
+    j = 0;
+}
 
-    if (i >= currentSolution->instance->num_nodes) {
+Solution* NodeSwapper::reset() {
+    if (!(i == 0 && j == 0) && j < num_nodes) {
+        // currently swapped, swap back
+        swap_nodes(currentSolution, i, j);
+    }
+    return currentSolution;
+}
+
+Solution* NodeSwapper::next() {
+    reset();
+
+    // increment
+    j = j+2;
+    if (j >= num_nodes) {
+        i++;
+        j = i + 2;
+    }
+
+    if (j >= num_nodes) {
         // we're done here, checked all nodes
         return NULL;
     }
 
-    // swap node i <-> node j from original solution
-    int node_i = get_nth_node(currentSolution, i);
-    int node_j = get_nth_node(currentSolution, j);
+    swap_nodes(currentSolution, i, j);
 
-    // swap them
-    solution = currentSolution->clone();  // clone current solution
-    // TODO(robhor) swap nodes
-    // TODO(robhor) recalculate length
-
-    return solution;
+    return currentSolution;
 }

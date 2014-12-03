@@ -6,12 +6,14 @@
 
 class NodeSwapper {
     Solution* currentSolution;
-    Solution* solution;
-    int i, j;
+    int i, j, num_nodes;
+
 
  public:
     explicit NodeSwapper(Solution* solution);
-    Solution* next();
+    Solution* next();   /// Generates the next swapped solution
+    void accept();      /// Accepts the last generated solution as a new base
+    Solution* reset();  /// Undo swap, retrieve original solution
 };
 
 #endif  // SRC_NODESWAPPER_H_

@@ -53,3 +53,67 @@ Solution* Solution::clone() {
 
     return solution;
 }
+
+int Solution::node_at(int n) {
+    for (auto tour : *tours) {
+        int tour_size = tour->size();
+        if (n < tour_size) {
+            return tour->at(n);
+        } else {
+            n -= tour_size;
+        }
+    }
+    return -1;
+}
+
+void Solution::set_node_at(int n, int new_node) {
+    for (auto tour : *tours) {
+        int tour_size = tour->size();
+        if (n < tour_size) {
+            tour->at(n) = new_node;
+            return;
+        } else {
+            n -= tour_size;
+        }
+    }
+}
+
+int Solution::predecessor_at(int n) {
+    for (auto tour : *tours) {
+        int tour_size = tour->size();
+        if (n < tour_size) {
+            if (n == 0) { return 0; }
+            return tour->at(n-1);
+        } else {
+            n -= tour_size;
+        }
+    }
+    return -1;
+}
+
+int Solution::successor_at(int n) {
+    for (auto tour : *tours) {
+        int tour_size = tour->size();
+        if (n < tour_size) {
+            if (n == tour_size - 1) { return 0; }
+            return tour->at(n+1);
+        } else {
+            n -= tour_size;
+        }
+    }
+    return -1;
+}
+
+void Solution::replace_node_at(int node_index, int new_node) {
+    int node        = node_at(node_index);
+    int predecessor = predecessor_at(node_index);
+    int successor   = successor_at(node_index);
+
+    length -= instance->get_distance(predecessor, node);
+    length -= instance->get_distance(node, successor);
+
+    length += instance->get_distance(predecessor, new_node);
+    length += instance->get_distance(new_node, successor);
+
+    set_node_at(node_index, new_node);
+}
