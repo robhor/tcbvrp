@@ -19,9 +19,13 @@ int Instance::get_distance(int from, int to) {
 }
 
 void Instance::print_summary() {
-    fprintf(stderr, "Nodes:      %i\n", num_nodes);
-    fprintf(stderr, "Time Limit: %i\n", time_limit);
-    fprintf(stderr, "Vehicles:   %i\n", num_vehicles);
+    fprintf(stderr, "Nodes:          %i\n", num_nodes);
+    fprintf(stderr, "Supply Nodes:   %lu\n", supply_nodes.size());
+    fprintf(stderr, "Demand Nodes:   %lu\n", demand_nodes.size());
+    fprintf(stderr, "Supply surplus: %lu\n", supply_nodes.size() - demand_nodes.size());
+    fprintf(stderr, "Time Limit:     %i\n", time_limit);
+    fprintf(stderr, "Vehicles:       %i\n", num_vehicles);
+    fprintf(stderr, "\n");
 }
 
 Instance::~Instance() {
