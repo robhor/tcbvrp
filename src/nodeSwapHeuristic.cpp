@@ -1,5 +1,7 @@
 // Copyright 2014 Robert Horvath, Johannes Vogel
+#include <cstddef>
 #include "nodeSwapHeuristic.h"
+
 
 
 Solution* nodeSwap(Solution* solution) {
