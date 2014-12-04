@@ -7,12 +7,13 @@
 class TourSplitter {
     Solution* solution;  /// The solution to manipulate
     Tour* buffer_tour;   /// Where the split off tour is moved to
-
     bool increment();    /// Move on to the next possible split
+    int split_begin;     /// Index of the start of the subtour to split off
+    int split_end;       /// Index of the end of the subtour to split off
+    void split();        /// Perform split
+
 
  public:
-    int split_index;     /// Indices of the source of the edge move
-    void split();        /// Perform split
     explicit TourSplitter(Solution* solution);
     ~TourSplitter();
 
