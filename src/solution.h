@@ -31,6 +31,9 @@ class Solution {
     /// The index iterates over all tours
     int node_at(int index);
 
+    /// Returns the tour of the node at the given index
+    Tour* tour_at(int index);
+
     /// Sets the node at the given index
     void set_node_at(int index, int node);
 

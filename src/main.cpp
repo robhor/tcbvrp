@@ -5,7 +5,7 @@
 #include "./instance.h"
 #include "./solution.h"
 #include "./greedy.h"
-#include "./nodeSwapper.h"
+#include "./nodeSwapHeuristic.h"
 
 int main(int argc, char** argv) {
     if (argc == 1) {
@@ -27,22 +27,7 @@ int main(int argc, char** argv) {
     solution->print();
 
     // swap nodes heuristic
-    int best_length = solution->length;
-    NodeSwapper ns(solution);
-    while (true) {
-        while ((solution = ns.next()) != NULL) {
-            if (solution->length < best_length) {
-                best_length = solution->length;
-                break;
-            }
-        }
-        if (solution != NULL) {
-            ns.accept();
-        } else {
-            solution = ns.reset();
-            break;
-        }
-    }
+    solution = nodeSwap(solution);
 
     fprintf(stderr, "\nNodeSwapper Solution:\n");
     solution->print();

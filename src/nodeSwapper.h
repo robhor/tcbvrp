@@ -8,6 +8,10 @@ class NodeSwapper {
     Solution* currentSolution;
     int i, j, num_nodes;
 
+    bool increment();   /// Increment i and j, return false no more indices
+    void swap_nodes();  /// Swap current nodes i and j
+    bool swap_valid();  /// Checks if last swap violates time limits
+
 
  public:
     explicit NodeSwapper(Solution* solution);
