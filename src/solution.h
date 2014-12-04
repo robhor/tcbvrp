@@ -1,6 +1,7 @@
 // Copyright 2014 Robert Horvath, Johannes Vogel
 #ifndef SRC_SOLUTION_H_
 #define SRC_SOLUTION_H_
+#include <stdio.h>
 #include <vector>
 #include "./instance.h"
 
@@ -23,6 +24,7 @@ class Solution {
     int get_tour_cost(Tour* tour);  /// Get the cost of the given tour
 
     void print();                   /// Print solution to stdout
+    void print(FILE* fd);           /// Print solution to a file descriptor
     Solution* clone();              /// Malloc a clone
 
     // Helpful methods
@@ -45,6 +47,12 @@ class Solution {
 
     /// Like set_node_at, but calculates length difference
     void replace_node_at(int index, int node);
+
+    /// Insert node into tour at given index, calculates length difference
+    void insert_node(Tour* tour, int index, int node);
+
+    /// Remove node from tour at given index, calculates length difference
+    void remove_node(Tour* tour, int index);
 };
 
 #endif  // SRC_SOLUTION_H_

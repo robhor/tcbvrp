@@ -1,16 +1,16 @@
 // Copyright 2014 Robert Horvath, Johannes Vogel
-#include "nodeSwapHeuristic.h"
-#include "./nodeSwapper.h"
+#include "./edgeMoveHeuristic.h"
+#include "./edgeMover.h"
 
-bool nodeSwap(Solution* solution) {
+bool edgeMove(Solution* solution) {
     int current_length = solution->length;
-    NodeSwapper ns(solution);
+    EdgeMover em = EdgeMover(solution);
 
-    while (ns.next() != nullptr) {
+    while (em.next() != nullptr) {
         if (solution->length < current_length) {
             return true;
         }
     }
-    solution = ns.reset();
+
     return false;
 }
