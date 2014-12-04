@@ -45,6 +45,12 @@ class Solution {
 
     /// Like set_node_at, but calculates length difference
     void replace_node_at(int index, int node);
+
+    /// Insert node into tour at given index, calculates length difference
+    void insert_node(Tour* tour, int index, int node);
+
+    /// Remove node from tour at given index, calculates length difference
+    void remove_node(Tour* tour, int index);
 };
 
 #endif  // SRC_SOLUTION_H_

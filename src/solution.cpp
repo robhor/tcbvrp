@@ -10,7 +10,9 @@ Solution::Solution() {
 int Solution::get_tour_cost(Tour *tour) {
     int cost = 0;
     int tour_size = tour->size();
-    if (tour_size > 0) cost += instance->get_distance(0, tour->at(0));
+    if (tour_size == 0) return cost;
+
+    cost += instance->get_distance(0, tour->at(0));
     for (int i = 0; i < tour_size - 1; i++) {
         int from = tour->at(i);
         int to   = tour->at(i+1);
@@ -39,6 +41,10 @@ void Solution::print() {
         printf("\n");
     }
     printf("%i\n", length);
+
+    if (length != get_cost()) {
+        fprintf(stderr, "ERROR: This length is incorrect :O\n");
+    }
 }
 
 Solution* Solution::clone() {
@@ -128,4 +134,52 @@ void Solution::replace_node_at(int node_index, int new_node) {
     length += instance->get_distance(new_node, successor);
 
     set_node_at(node_index, new_node);
+}
+
+void Solution::insert_node(Tour* tour, int index, int node) {
+    int predecessor, successor;
+    int tour_size = tour->size();
+
+    if (index == 0) {
+        predecessor = 0;
+    } else {
+        predecessor = tour->at(index-1);
+    }
+
+    if (index > tour_size - 1) {
+        successor = 0;
+    } else {
+        successor = tour->at(index);
+    }
+
+    length -= instance->get_distance(predecessor, successor);
+    length += instance->get_distance(predecessor, node);
+    length += instance->get_distance(node, successor);
+
+    tour->insert(tour->begin()+index, node);
+}
+
+void Solution::remove_node(Tour* tour, int index) {
+    int predecessor, successor;
+    int tour_size = tour->size();
+
+    if (index == 0) {
+        predecessor = 0;
+    } else {
+        predecessor = tour->at(index-1);
+    }
+
+    if (index == tour_size - 1) {
+        successor = 0;
+    } else {
+        successor = tour->at(index+1);
+    }
+
+    int node = tour->at(index);
+
+    length -= instance->get_distance(predecessor, node);
+    length -= instance->get_distance(node, successor);
+    length += instance->get_distance(predecessor, successor);
+
+    tour->erase(tour->begin()+index);
 }
