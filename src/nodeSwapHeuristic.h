@@ -3,8 +3,11 @@
 #define SRC_NODESWAPHEURISTIC_H_
 #include "./instance.h"
 #include "./solution.h"
-#include "./nodeSwapper.h"
 
-Solution* nodeSwap(Solution* solution);
+/**
+ * Performs node swapping heuristic.
+ * Returns true if solution has been improved, false otherwise.
+ */
+bool nodeSwap(Solution* solution);
 
 #endif  // SRC_NODESWAPHEURISTIC_H_

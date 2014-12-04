@@ -6,6 +6,7 @@
 #include "./solution.h"
 #include "./greedy.h"
 #include "./nodeSwapHeuristic.h"
+#include "./edgeMoveHeuristic.h"
 
 int main(int argc, char** argv) {
     if (argc == 1) {
@@ -26,10 +27,19 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Greedy Solution:\n");
     solution->print();
 
-    // swap nodes heuristic
-    solution = nodeSwap(solution);
+    // perform Variable Neighborhood Descent
+    int current_length = solution->length;
+    fprintf(stderr, "Current solution length: %i", current_length);
+    while (nodeSwap(solution) || edgeMove(solution)) {
+        for (; current_length != 0; current_length /= 10) {
+            fprintf(stderr, "\b");
+        }
+        current_length = solution->length;
+        fprintf(stderr, "%i", current_length);
+    }
+    fprintf(stderr, "\n");
 
-    fprintf(stderr, "\nNodeSwapper Solution:\n");
+    // fprintf(stderr, "\nNodeSwapper Solution:\n");
     solution->print();
 
     return 0;
