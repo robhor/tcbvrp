@@ -1,6 +1,7 @@
 // Copyright 2014 Robert Horvath, Johannes Vogel
 #ifndef SRC_SOLUTION_H_
 #define SRC_SOLUTION_H_
+#include <stdio.h>
 #include <vector>
 #include "./instance.h"
 
@@ -23,6 +24,7 @@ class Solution {
     int get_tour_cost(Tour* tour);  /// Get the cost of the given tour
 
     void print();                   /// Print solution to stdout
+    void print(FILE* fd);           /// Print solution to a file descriptor
     Solution* clone();              /// Malloc a clone
 
     // Helpful methods

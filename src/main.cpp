@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     // Run the greedy heuristic
     Solution* solution = greedy(instance);
     fprintf(stderr, "Greedy Solution:\n");
-    solution->print();
+    solution->print(stderr);
 
     // perform Variable Neighborhood Descent
     int current_length = solution->length;

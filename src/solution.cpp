@@ -31,20 +31,24 @@ int Solution::get_cost() {
     return cost;
 }
 
-void Solution::print() {
+void Solution::print(FILE* fd) {
     for (auto tour : *tours) {
-        printf("0 ");
-        for (auto node : *tour) printf("%i ", node);
-        printf("0");
-        fflush(stdout);
+        fprintf(fd, "0 ");
+        for (auto node : *tour) fprintf(fd, "%i ", node);
+        fprintf(fd, "0");
+        fflush(fd);
         fprintf(stderr, " (%i)", get_tour_cost(tour));
-        printf("\n");
+        fprintf(fd, "\n");
     }
-    printf("%i\n", length);
+    fprintf(fd, "%i\n", length);
 
     if (length != get_cost()) {
         fprintf(stderr, "ERROR: This length is incorrect :O\n");
     }
+}
+
+void Solution::print() {
+    print(stdout);
 }
 
 Solution* Solution::clone() {
