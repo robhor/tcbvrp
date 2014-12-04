@@ -88,6 +88,18 @@ Tour* Solution::tour_at(int n) {
     return NULL;
 }
 
+int Solution::node_tour_index(int n) {
+    for (auto tour : *tours) {
+        int tour_size = tour->size();
+        if (n < tour_size) {
+            return n;
+        } else {
+            n -= tour_size;
+        }
+    }
+    return -1;
+}
+
 void Solution::set_node_at(int n, int new_node) {
     for (auto tour : *tours) {
         int tour_size = tour->size();
