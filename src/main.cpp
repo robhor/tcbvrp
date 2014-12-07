@@ -5,8 +5,32 @@
 #include "./instance.h"
 #include "./solution.h"
 #include "./greedy.h"
+#include "./randomGreedy.h"
 #include "./nodeSwapHeuristic.h"
 #include "./edgeMoveHeuristic.h"
+
+void vnd(Solution* solution) {
+    // perform Variable Neighborhood Descent
+    int current_length = solution->length;
+    fprintf(stderr, "Current solution length: %i", current_length);
+    while (nodeSwap(solution) || edgeMove(solution)) {
+        for (; current_length != 0; current_length /= 10) {
+            fprintf(stderr, "\b");
+        }
+        current_length = solution->length;
+        fprintf(stderr, "%i", current_length);
+    }
+    fprintf(stderr, "\n");
+}
+
+Solution* grasp(Instance* instance) {
+    // Run randomized greedy heuristic
+    Solution* solution = randomGreedy(instance, 0.4);
+    fprintf(stderr, "Greedy Solution:\n");
+    solution->print(stderr);
+
+    return solution;
+}
 
 int main(int argc, char** argv) {
     if (argc == 1) {
@@ -22,25 +46,8 @@ int main(int argc, char** argv) {
 
     instance->print_summary();
 
-    // Run the greedy heuristic
-    Solution* solution = greedy(instance);
-    fprintf(stderr, "Greedy Solution:\n");
-    solution->print(stderr);
-
-    // perform Variable Neighborhood Descent
-    int current_length = solution->length;
-    fprintf(stderr, "Current solution length: %i", current_length);
-    while (nodeSwap(solution) || edgeMove(solution)) {
-        for (; current_length != 0; current_length /= 10) {
-            fprintf(stderr, "\b");
-        }
-        current_length = solution->length;
-        fprintf(stderr, "%i", current_length);
-    }
-    fprintf(stderr, "\n");
-
-    // fprintf(stderr, "\nNodeSwapper Solution:\n");
+    Solution* solution = grasp(instance);
+    vnd(solution);
     solution->print();
-
     return 0;
 }
