@@ -1,13 +1,29 @@
 // Copyright 2014 Robert Horvath, Johannes Vogel
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 #include <string>
+
 #include "./instance.h"
 #include "./solution.h"
 #include "./greedy.h"
 #include "./nodeSwapHeuristic.h"
 #include "./edgeMoveHeuristic.h"
 #include "./supplySwapHeuristic.h"
+
+static Solution* best_solution;
+static time_t last_interrupt = 0;
+
+void interrupt_handler(int signum) {
+    fprintf(stderr, "Caught signal %d\n", signum);
+    bool stop = (time(0) - last_interrupt) < 1;
+    if (best_solution) {
+        best_solution->print(stop ? stdout : stderr);
+    }
+    if (stop) exit(0);
+    last_interrupt = time(0);
+}
+
 
 int main(int argc, char** argv) {
     if (argc == 1) {
@@ -27,6 +43,9 @@ int main(int argc, char** argv) {
     Solution* solution = greedy(instance);
     fprintf(stderr, "Greedy Solution:\n");
     solution->print(stderr);
+    best_solution = solution->clone();
+
+    signal(SIGINT, interrupt_handler);
 
     // perform Variable Neighborhood Descent
     int current_length = solution->length;
@@ -37,11 +56,14 @@ int main(int argc, char** argv) {
         }
         current_length = solution->length;
         fprintf(stderr, "%i", current_length);
+        Solution* new_best = solution->clone();
+        delete best_solution;
+        best_solution = new_best;
     }
     fprintf(stderr, "\n");
 
     // fprintf(stderr, "\nNodeSwapper Solution:\n");
-    solution->print();
+    best_solution->print();
 
     return 0;
 }
