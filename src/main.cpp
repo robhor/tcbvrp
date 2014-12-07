@@ -11,16 +11,16 @@
 #include "./edgeMoveHeuristic.h"
 
 static Solution* best_solution;
-static int interrupt_count = 0;
+static time_t last_interrupt = 0;
 
 void interrupt_handler(int signum) {
     fprintf(stderr, "Caught signal %d\n", signum);
+    bool stop = (time(0) - last_interrupt) < 1;
     if (best_solution) {
-        best_solution->print((interrupt_count == 0) ? stderr : stdout);
+        best_solution->print(stop ? stdout : stderr);
     }
-    if (interrupt_count > 0) exit(signum);
-
-    interrupt_count++;
+    if (stop) exit(0);
+    last_interrupt = time(0);
 }
 
 
@@ -58,7 +58,6 @@ int main(int argc, char** argv) {
         Solution* new_best = solution->clone();
         delete best_solution;
         best_solution = new_best;
-        interrupt_count = 0;
     }
     fprintf(stderr, "\n");
 
