@@ -3,7 +3,10 @@
 #include "./edgeMover.h"
 
 bool edgeMove(Solution* solution) {
-    int current_length = solution->length;
+    return edgeMove(solution, solution->length);
+}
+
+bool edgeMove(Solution* solution, int current_length) {
     EdgeMover em = EdgeMover(solution);
 
     while (em.next() != nullptr) {
@@ -12,5 +15,6 @@ bool edgeMove(Solution* solution) {
         }
     }
 
+    em.reset();
     return false;
 }

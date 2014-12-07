@@ -9,5 +9,6 @@
  * Returns true if the solution has been improved, false otherwise.
  */
 bool edgeMove(Solution* solution);
+bool edgeMove(Solution* solution, int current_length);
 
 #endif  // SRC_EDGEMOVEHEURISTIC_H_

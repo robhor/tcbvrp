@@ -37,7 +37,9 @@ void Solution::print(FILE* fd) {
         for (auto node : *tour) fprintf(fd, "%i ", node);
         fprintf(fd, "0");
         fflush(fd);
-        fprintf(stderr, " (%i)", get_tour_cost(tour));
+        int tour_cost = get_tour_cost(tour);
+        fprintf(stderr, " (%i%s)", tour_cost,
+            (tour_cost > instance->time_limit) ? " - INVALID" : "");
         fprintf(fd, "\n");
     }
     fprintf(fd, "%i\n", length);

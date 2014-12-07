@@ -2,15 +2,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <ctime>
 #include "./instance.h"
 #include "./solution.h"
 #include "./greedy.h"
 #include "./nodeSwapHeuristic.h"
 #include "./edgeMoveHeuristic.h"
+#include "./complexMoveHeuristic.h"
 
 int main(int argc, char** argv) {
     if (argc == 1) {
-        printf("USAGE: %s file\n", argv[0]);
+        printf("USAGE: %s file [timeout]\n", argv[0]);
         return 0;
     }
 
@@ -20,6 +22,12 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    int timeout = 10;
+    if (argc >= 3) {
+        timeout = atoi(argv[2]);
+    }
+    if (timeout < 1) { timeout = 1; }
+
     instance->print_summary();
 
     // Run the greedy heuristic
@@ -27,20 +35,22 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Greedy Solution:\n");
     solution->print(stderr);
 
-    // perform Variable Neighborhood Descent
+
+    // Perform Variable Neighborhood Descent
     int current_length = solution->length;
     fprintf(stderr, "Current solution length: %i", current_length);
-    while (nodeSwap(solution) || edgeMove(solution)) {
+    time_t time_to_stop = time(nullptr) + timeout;
+
+    while (complexMove(solution, time_to_stop)) {
         for (; current_length != 0; current_length /= 10) {
             fprintf(stderr, "\b");
         }
         current_length = solution->length;
+        time_to_stop = time(nullptr) + timeout;
         fprintf(stderr, "%i", current_length);
     }
     fprintf(stderr, "\n");
 
-    // fprintf(stderr, "\nNodeSwapper Solution:\n");
     solution->print();
-
     return 0;
 }
