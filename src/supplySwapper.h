@@ -14,8 +14,6 @@ class SupplySwapper {
     void swap_nodes();  /// Swap current nodes i and j
     bool swap_valid();  /// Checks if last swap violates time limits
 
-
-
  public:
     explicit SupplySwapper(Solution* solution);
     Solution* next();   /// Generates the next swapped solution

@@ -7,6 +7,7 @@
 #include "./greedy.h"
 #include "./nodeSwapHeuristic.h"
 #include "./edgeMoveHeuristic.h"
+#include "./supplySwapHeuristic.h"
 
 int main(int argc, char** argv) {
     if (argc == 1) {
@@ -30,7 +31,7 @@ int main(int argc, char** argv) {
     // perform Variable Neighborhood Descent
     int current_length = solution->length;
     fprintf(stderr, "Current solution length: %i", current_length);
-    while (nodeSwap(solution) || edgeMove(solution)) {
+    while (nodeSwap(solution) || edgeMove(solution) || supplySwap(solution)) {
         for (; current_length != 0; current_length /= 10) {
             fprintf(stderr, "\b");
         }

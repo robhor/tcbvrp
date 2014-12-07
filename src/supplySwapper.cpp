@@ -6,10 +6,8 @@
 using namespace std;
 
 SupplySwapper::SupplySwapper(Solution* solution) {
-    // in supplySwapper.h:
-    // vector<int> remaining_supplies;
     old_node = -1;
-    remaining_supplies = solution->instance->supply_nodes;
+    remaining_supplies = vector<int>(solution->instance->supply_nodes);
     
     this->solution = solution;
     Instance* instance = solution->instance;
@@ -18,18 +16,19 @@ SupplySwapper::SupplySwapper(Solution* solution) {
     for (int i = 0; i < num_nodes; i += 2) {
         int node = solution->node_at(i);
         vector<int>::iterator it = find(remaining_supplies.begin(), remaining_supplies.end(), node);
-        remaining_supplies.erase(it);
+        
+       if (it != remaining_supplies.end()) {
+            remaining_supplies.erase(it);
+       }
     }
     
-    printf("done: %lu supplies remaining\n",remaining_supplies.size());
-    printf("should be %lu supply nodes\n",instance->supply_nodes.size()-instance->demand_nodes.size());
-    printf("instance %lu supplies\n",instance->supply_nodes.size() );
-    printf("instance %lu demands\n",instance->demand_nodes.size() );
+    fprintf(stderr, "\ndone: %lu supplies remaining\n",remaining_supplies.size());
+    fprintf(stderr, "should be %lu supply nodes\n",instance->supply_nodes.size()-instance->demand_nodes.size());
+    fprintf(stderr, "instance %lu supplies\n",instance->supply_nodes.size() );
+    fprintf(stderr, "instance %lu demands\n",instance->demand_nodes.size() );
     
-    // was sind i & j?
-    //         >>>>>>>>>>>>> Überlege dir ein Iterations-schema. <<<<<<<<<<<<<<<
     i = -2;  // Iterates over the supply nodes in the solution
-    j = 0;  // Iterates over the remaining supply nodes
+    j = 0;   // Iterates over the remaining supply nodes
 }
 
 Solution* SupplySwapper::reset() {
