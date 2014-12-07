@@ -67,14 +67,8 @@ Solution* Solution::clone() {
 }
 
 void Solution::trim() {
-    for (vector<Tour*>::iterator it = tours->begin(); it != tours->end();) {
-        if((*it)->size() == 0) {
-            it = tours->erase(it);
-            delete *it;
-        } else {
-            it++;
-        }
-    }
+    tours->erase(std::remove_if(tours->begin(), tours->end(), 
+                 [](Tour* tour) { return tour->size() == 0; }), tours->end());
 }
 
 int Solution::node_at(int n) {
