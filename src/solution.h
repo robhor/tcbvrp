@@ -26,6 +26,7 @@ class Solution {
     void print();                   /// Print solution to stdout
     void print(FILE* fd);           /// Print solution to a file descriptor
     Solution* clone();              /// Malloc a clone
+    void trim();                    /// Removes empty tours
 
     // Helpful methods
 

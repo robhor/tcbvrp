@@ -42,6 +42,7 @@ int main(int argc, char** argv) {
     time_t time_to_stop = time(nullptr) + timeout;
 
     while (complexMove(solution, time_to_stop)) {
+        solution->trim();
         for (; current_length != 0; current_length /= 10) {
             fprintf(stderr, "\b");
         }

@@ -28,31 +28,11 @@ EdgeMover::~EdgeMover() {
         dst_tour = tmp_tour;
     }
 
-    Tour* t;
-
-    int num_tours = solution->tours->size();
-    t = solution->tours->at(num_tours-1);
+    // Remove our buffer tour if nothing has been added to it
+    Tour* t = solution->tours->back();
     if (t->size() == 0) {
         solution->tours->pop_back();
         delete t;
-        num_tours--;
-    }
-
-    if (dst_tour < num_tours) {
-        t = solution->tours->at(dst_tour);
-        if (t->size() == 0) {
-            solution->tours->erase(solution->tours->begin()+dst_tour);
-            delete t;
-        }
-    }
-
-    num_tours = solution->tours->size();
-    if (src_tour < num_tours) {
-        t = solution->tours->at(src_tour);
-        if (t->size() == 0) {
-            solution->tours->erase(solution->tours->begin()+src_tour);
-            delete t;
-        }
     }
 }
 

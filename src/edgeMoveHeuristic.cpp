@@ -15,6 +15,5 @@ bool edgeMove(Solution* solution, int current_length) {
         }
     }
 
-    em.reset();
     return false;
 }

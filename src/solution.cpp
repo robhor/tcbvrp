@@ -66,6 +66,17 @@ Solution* Solution::clone() {
     return solution;
 }
 
+void Solution::trim() {
+    for (vector<Tour*>::iterator it = tours->begin(); it != tours->end();) {
+        if((*it)->size() == 0) {
+            it = tours->erase(it);
+            delete *it;
+        } else {
+            it++;
+        }
+    }
+}
+
 int Solution::node_at(int n) {
     for (auto tour : *tours) {
         int tour_size = tour->size();
