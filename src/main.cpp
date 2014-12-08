@@ -33,7 +33,7 @@ void interrupt_handler(int signum) {
 }
 
 void set_best_solution(Solution* solution) {
-    if (best_solution && best_solution->length < solution->length) {
+    if (best_solution && best_solution->length <= solution->length) {
         return;
     }
     best_solution_time = time(0);
