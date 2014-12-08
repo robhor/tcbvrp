@@ -4,6 +4,7 @@
 #include <signal.h>
 #include <string>
 #include <ctime>
+#include <iostream>
 
 #include "./instance.h"
 #include "./solution.h"
@@ -11,9 +12,14 @@
 #include "./randomGreedy.h"
 #include "./complexMoveHeuristic.h"
 
+#include <boost/program_options.hpp> 
+
 static Solution* best_solution;
 static time_t last_interrupt = 0;
+static float alpha = 0.4;
 static int timeout = 10;
+static bool randomized = false;
+static bool best_improvement = false;
 
 void interrupt_handler(int signum) {
     fprintf(stderr, "Caught signal %d\n", signum);
@@ -48,6 +54,7 @@ Solution* vnd(Solution* solution) {
 }
 
 Solution* grasp(Instance* instance) {
+    // TODO(robhor) GRASP
     // Run randomized greedy heuristic
     Solution* solution = randomGreedy(instance, 0.4);
     fprintf(stderr, "Greedy Solution:\n");
@@ -56,40 +63,87 @@ Solution* grasp(Instance* instance) {
     return solution;
 }
 
-int main(int argc, char** argv) {
-    if (argc == 1) {
-        printf("USAGE: %s file [timeout]\n", argv[0]);
-        return 0;
-    }
-
-    Instance* instance = ReadInstanceFile(argv[1]);
-    if (!instance) {
-        fprintf(stderr, "The instance file could not be read: %s\n", argv[1]);
-        return 1;
-    }
-
-    timeout = 3 * instance->num_nodes;
-    if (argc >= 3) {
-        timeout = atoi(argv[2]);
-    }
-    if (timeout < 1) { timeout = 1; }
-
-    instance->print_summary();
-
-    bool randomized_construction = true;
+/// Normal old solving, no GRASP
+void solve(Instance* instance) {
     Solution* solution;
 
-    if (randomized_construction) {
-        solution = grasp(instance);
+    if (randomized) {
+        solution = randomGreedy(instance, 0.4);
     } else {
         solution = greedy(instance);
     }
+    
     fprintf(stderr, "Greedy Solution:\n");
     solution->print(stderr);
     signal(SIGINT, interrupt_handler);
 
     solution = vnd(solution);
     solution->print();
+}
+
+int main(int argc, char** argv) {
+    namespace po = boost::program_options;
+    po::options_description description("Time-Constrained Bepartite Vehicle Routing Problem Solver");
+
+    description.add_options()
+        ("timeout,t", po::value<int>()->implicit_value(10), "Timeout after new solution has been found")
+        ("randomized,r", "Use a randomized construction heuristic")
+        ("alpha,a", po::value<float>(), "Alpha value for random construction heuristic [0-1]")
+        ("grasp,g", "Use GRASP")
+        ("best-improvement,b", "Use best-improvement instead of first-improvement")
+        ("help,h", "Display this help message")
+        ("instance,i", po::value<std::string>(), "Instance file")
+        ("version,v", "Display the version number");
+
+    po::positional_options_description p;
+    p.add("instance", 1);
+    po::variables_map vm;
+    try {
+        po::store(po::command_line_parser(argc, argv).options(description).positional(p).run(), vm);
+        po::notify(vm);
+    } catch(boost::program_options::error& e) {
+        std::cout << description;
+        exit(1);
+    }
+
+    if (vm.count("version")) {
+        printf("1.0\n");
+        exit(0);
+    } else if (vm.count("help") || !vm.count("instance")){
+        std::cout << description;
+        exit(0);
+    }
+
+    std::string file = vm["instance"].as<std::string>();
+    Instance* instance = ReadInstanceFile(file.c_str());
+    instance->print_summary();
+
+    if (vm.count("timeout")){
+        timeout = vm["timeout"].as<int>();
+    } else {
+        timeout = 3 * instance->num_nodes;
+    }
+    fprintf(stderr, "Timeout: %is\n", timeout);
+
+    if (vm.count("randomized")) {
+        randomized = true;
+    }
+
+    if (vm.count("alpha")) {
+        alpha = vm["alpha"].as<float>();
+        if (alpha < 0) alpha = 0;
+        else if (alpha > 1) alpha = 1;
+    }
+
+    if (vm.count("best-improvement")) {
+        best_improvement = true;
+    }
+
+    if (vm.count("grasp")) {
+        grasp(instance);
+    } else {
+        solve(instance);
+    }
 
     return 0;
 }

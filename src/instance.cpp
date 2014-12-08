@@ -34,7 +34,7 @@ Instance::~Instance() {
 
 
 
-Instance* ReadInstanceFile(char* path) {
+Instance* ReadInstanceFile(const char* path) {
     ifstream infile(path);
 
     Instance *instance = new Instance;

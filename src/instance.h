@@ -31,6 +31,6 @@ class Instance {
  * Read an instance file and return a parsed Instance object, 
  * or null in case of an error
  */
-Instance* ReadInstanceFile(char* path);
+Instance* ReadInstanceFile(const char* path);
 
 #endif  // SRC_INSTANCE_H_
