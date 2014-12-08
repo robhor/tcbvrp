@@ -66,8 +66,20 @@ Solution* Solution::clone() {
     return solution;
 }
 
+void Solution::set(Solution* solution) {
+    delete tours;
+
+    this->instance = solution->instance;
+    this->tours = new vector<Tour*>;
+    this->length = solution->length;
+
+    for (auto tour : *solution->tours) {
+        this->tours->push_back(new Tour(tour->begin(), tour->end()));
+    }
+}
+
 void Solution::trim() {
-    tours->erase(std::remove_if(tours->begin(), tours->end(), 
+    tours->erase(std::remove_if(tours->begin(), tours->end(),
                  [](Tour* tour) { return tour->size() == 0; }), tours->end());
 }
 

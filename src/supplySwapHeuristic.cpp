@@ -15,6 +15,6 @@ bool supplySwap(Solution* solution) {
             return true;
         }
     }
-    
+
     return false;
 }

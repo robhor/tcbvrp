@@ -1,6 +1,7 @@
 // Copyright 2014 Robert Horvath, Johannes Vogel
 #ifndef SRC_SUPPLYSWAPPER_H_
 #define SRC_SUPPLYSWAPPER_H_
+#include <vector>
 #include "./instance.h"
 #include "./solution.h"
 

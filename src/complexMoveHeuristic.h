@@ -10,6 +10,6 @@
  * create complex moves.
  * Stops trying to find further solutions if stop_time has been reached.
  */
-bool complexMove(Solution* solution, time_t stop_time);
+bool complexMove(Solution* solution, time_t stop_time, bool best_improvement);
 
 #endif  // SRC_COMPLEXMOVEHEURISTIC_H_

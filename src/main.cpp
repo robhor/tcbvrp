@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <boost/program_options.hpp>
 #include <string>
 #include <ctime>
 #include <iostream>
@@ -11,8 +12,6 @@
 #include "./greedy.h"
 #include "./randomGreedy.h"
 #include "./complexMoveHeuristic.h"
-
-#include <boost/program_options.hpp> 
 
 static Solution* best_solution;
 static time_t last_interrupt = 0;
@@ -46,13 +45,13 @@ Solution* vnd(Solution* solution) {
     time_t start_time = time(0);
     time_t time_to_stop = start_time + timeout;
 
-    while (complexMove(solution, time_to_stop)) {
+    while (complexMove(solution, time_to_stop, best_improvement)) {
         solution->trim();
         current_length = solution->length;
         fprintf(stderr, "Current solution length: %i (%lus)\n",
             current_length, time(0)-start_time);
         time_to_stop = time(0) + timeout;
-        
+
         set_best_solution(solution);
     }
     return best_solution;
@@ -61,7 +60,7 @@ Solution* vnd(Solution* solution) {
 Solution* grasp(Instance* instance) {
     for (int i = 0; i < 5; i++) {
         Solution* solution = randomGreedy(instance, alpha);
-        
+
         fprintf(stderr, "Greedy Solution:\n");
         solution->print(stderr);
 
@@ -85,7 +84,7 @@ void solve(Instance* instance) {
     } else {
         solution = greedy(instance);
     }
-    
+
     fprintf(stderr, "Greedy Solution:\n");
     solution->print(stderr);
     signal(SIGINT, interrupt_handler);
@@ -96,10 +95,12 @@ void solve(Instance* instance) {
 
 int main(int argc, char** argv) {
     namespace po = boost::program_options;
-    po::options_description description("Time-Constrained Bepartite Vehicle Routing Problem Solver");
+    po::options_description description
+        ("Time-Constrained Bepartite Vehicle Routing Problem Solver");
 
     description.add_options()
-        ("timeout,t", po::value<int>()->implicit_value(10), "Timeout after new solution has been found")
+        ("timeout,t", po::value<int>()->implicit_value(10),
+            "Timeout after new solution has been found")
         ("randomized,r", "Use a randomized construction heuristic")
         ("alpha,a", po::value<float>(), "Alpha value for random construction heuristic [0-1]")
         ("grasp,g", "Use GRASP")
@@ -122,7 +123,7 @@ int main(int argc, char** argv) {
     if (vm.count("version")) {
         printf("1.0\n");
         exit(0);
-    } else if (vm.count("help") || !vm.count("instance")){
+    } else if (vm.count("help") || !vm.count("instance")) {
         std::cout << description;
         exit(0);
     }
@@ -131,9 +132,9 @@ int main(int argc, char** argv) {
     Instance* instance = ReadInstanceFile(file.c_str());
     instance->print_summary();
 
-    if (vm.count("timeout")){
+    if (vm.count("timeout")) {
         timeout = vm["timeout"].as<int>();
-    } else if(vm.count("grasp")) {
+    } else if (vm.count("grasp")) {
         timeout = 5;
     } else {
         timeout = 3 * instance->num_nodes;
