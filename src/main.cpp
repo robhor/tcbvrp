@@ -20,6 +20,7 @@ static float alpha = 0.4;
 static int timeout = 10;
 static bool randomized = false;
 static bool best_improvement = false;
+static time_t global_start_time;
 
 void interrupt_handler(int signum) {
     fprintf(stderr, "Caught signal %d\n", signum);
@@ -29,6 +30,13 @@ void interrupt_handler(int signum) {
     }
     if (stop) exit(0);
     last_interrupt = time(0);
+}
+
+void set_best_solution(Solution* solution) {
+    if (best_solution && best_solution != solution) {
+        delete best_solution;
+    }
+    best_solution = solution->clone();
 }
 
 Solution* vnd(Solution* solution) {
@@ -45,22 +53,27 @@ Solution* vnd(Solution* solution) {
             current_length, time(0)-start_time);
         time_to_stop = time(0) + timeout;
         
-        Solution* new_best = solution->clone();
-        delete best_solution;
-        best_solution = new_best;
+        set_best_solution(solution);
     }
-    fprintf(stderr, "\n");
     return best_solution;
 }
 
 Solution* grasp(Instance* instance) {
-    // TODO(robhor) GRASP
-    // Run randomized greedy heuristic
-    Solution* solution = randomGreedy(instance, 0.4);
-    fprintf(stderr, "Greedy Solution:\n");
-    solution->print(stderr);
+    for (int i = 0; i < 5; i++) {
+        Solution* solution = randomGreedy(instance, alpha);
+        
+        fprintf(stderr, "Greedy Solution:\n");
+        solution->print(stderr);
 
-    return solution;
+        solution = vnd(solution);
+        solution->print(stderr);
+        if (solution->length < best_solution->length) {
+            set_best_solution(solution);
+        }
+    }
+    fprintf(stderr, "Best solution found in %lus:\n", time(0)-global_start_time);
+    best_solution->print();
+    return best_solution;
 }
 
 /// Normal old solving, no GRASP
@@ -68,7 +81,7 @@ void solve(Instance* instance) {
     Solution* solution;
 
     if (randomized) {
-        solution = randomGreedy(instance, 0.4);
+        solution = randomGreedy(instance, alpha);
     } else {
         solution = greedy(instance);
     }
@@ -120,6 +133,8 @@ int main(int argc, char** argv) {
 
     if (vm.count("timeout")){
         timeout = vm["timeout"].as<int>();
+    } else if(vm.count("grasp")) {
+        timeout = 5;
     } else {
         timeout = 3 * instance->num_nodes;
     }
@@ -139,6 +154,7 @@ int main(int argc, char** argv) {
         best_improvement = true;
     }
 
+    global_start_time = time(0);
     if (vm.count("grasp")) {
         grasp(instance);
     } else {
