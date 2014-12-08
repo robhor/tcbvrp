@@ -55,16 +55,15 @@ int main(int argc, char** argv) {
     // Perform Variable Neighborhood Descent
     int current_length = solution->length;
     fprintf(stderr, "Current solution length: %i", current_length);
-    time_t time_to_stop = time(nullptr) + timeout;
+    time_t start_time = time(0);
+    time_t time_to_stop = start_time + timeout;
 
     while (complexMove(solution, time_to_stop)) {
         solution->trim();
-        for (; current_length != 0; current_length /= 10) {
-            fprintf(stderr, "\b");
-        }
         current_length = solution->length;
-        time_to_stop = time(nullptr) + timeout;
-        fprintf(stderr, "%i", current_length);
+        fprintf(stderr, "Current solution length: %i (%lus)\n",
+            current_length, time(0)-start_time);
+        time_to_stop = time(0) + timeout;
         
         Solution* new_best = solution->clone();
         delete best_solution;
