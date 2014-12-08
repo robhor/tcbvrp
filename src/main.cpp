@@ -73,7 +73,7 @@ Solution* grasp(Instance* instance) {
         solution->print(stderr);
     }
     fprintf(stderr, "Best solution found in %lus, total runtime %lus:\n",
-        time(0)-best_solution_time, time(0)-global_start_time);
+        best_solution_time-global_start_time, time(0)-global_start_time);
     best_solution->print();
     return best_solution;
 }
@@ -94,6 +94,8 @@ void solve(Instance* instance) {
     signal(SIGINT, interrupt_handler);
 
     solution = vnd(solution);
+    fprintf(stderr, "Best solution found in %lus, total runtime %lus:\n",
+        best_solution_time-global_start_time, time(0)-global_start_time);
     solution->print();
 }
 
