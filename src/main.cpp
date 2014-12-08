@@ -14,6 +14,7 @@
 #include "./complexMoveHeuristic.h"
 
 static Solution* best_solution;
+static int best_solution_time = 0;
 static time_t last_interrupt = 0;
 static float alpha = 0.4;
 static int timeout = 10;
@@ -32,6 +33,10 @@ void interrupt_handler(int signum) {
 }
 
 void set_best_solution(Solution* solution) {
+    if (best_solution && best_solution->length < solution->length) {
+        return;
+    }
+    best_solution_time = time(0);
     if (best_solution && best_solution != solution) {
         delete best_solution;
     }
@@ -48,8 +53,8 @@ Solution* vnd(Solution* solution) {
     while (complexMove(solution, time_to_stop, best_improvement)) {
         solution->trim();
         current_length = solution->length;
-        fprintf(stderr, "Current solution length: %i (%lus)\n",
-            current_length, time(0)-start_time);
+        fprintf(stderr, "Current solution length: %i (%lus / %lus)\n",
+            current_length, time(0)-start_time, time(0)-global_start_time);
         time_to_stop = time(0) + timeout;
 
         set_best_solution(solution);
@@ -58,7 +63,7 @@ Solution* vnd(Solution* solution) {
 }
 
 Solution* grasp(Instance* instance) {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 30; i++) {
         Solution* solution = randomGreedy(instance, alpha);
 
         fprintf(stderr, "Greedy Solution Nr. %i:\n", i);
@@ -66,11 +71,9 @@ Solution* grasp(Instance* instance) {
 
         solution = vnd(solution);
         solution->print(stderr);
-        if (solution->length < best_solution->length) {
-            set_best_solution(solution);
-        }
     }
-    fprintf(stderr, "Best solution found in %lus:\n", time(0)-global_start_time);
+    fprintf(stderr, "Best solution found in %lus, total runtime %lus:\n",
+        time(0)-best_solution_time, time(0)-global_start_time);
     best_solution->print();
     return best_solution;
 }
@@ -87,6 +90,7 @@ void solve(Instance* instance) {
 
     fprintf(stderr, "Greedy Solution:\n");
     solution->print(stderr);
+    set_best_solution(solution);
     signal(SIGINT, interrupt_handler);
 
     solution = vnd(solution);
