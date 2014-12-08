@@ -58,10 +58,10 @@ Solution* vnd(Solution* solution) {
 }
 
 Solution* grasp(Instance* instance) {
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 10; i++) {
         Solution* solution = randomGreedy(instance, alpha);
 
-        fprintf(stderr, "Greedy Solution:\n");
+        fprintf(stderr, "Greedy Solution Nr. %i:\n", i);
         solution->print(stderr);
 
         solution = vnd(solution);
@@ -135,7 +135,7 @@ int main(int argc, char** argv) {
     if (vm.count("timeout")) {
         timeout = vm["timeout"].as<int>();
     } else if (vm.count("grasp")) {
-        timeout = 5;
+        timeout = instance->num_nodes / 2;
     } else {
         timeout = 3 * instance->num_nodes;
     }
