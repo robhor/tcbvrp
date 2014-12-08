@@ -59,7 +59,7 @@ Solution* vnd(Solution* solution) {
 
         set_best_solution(solution);
     }
-    return best_solution;
+    return solution;
 }
 
 Solution* grasp(Instance* instance) {
