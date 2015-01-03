@@ -7,20 +7,21 @@ Solution::Solution() {
     length = 0;
 }
 
-int Solution::get_tour_cost(Tour *tour) {
-    int cost = 0;
-    int tour_size = tour->size();
-    if (tour_size == 0) return cost;
+Solution::Solution(Instance* instance) {
+    this->length = 0;
+    this->instance = instance;
+    this->tours = new vector<Tour*>;
+}
 
-    cost += instance->get_distance(0, tour->at(0));
-    for (int i = 0; i < tour_size - 1; i++) {
-        int from = tour->at(i);
-        int to   = tour->at(i+1);
-        int distance = instance->get_distance(from, to);
-        cost += distance;
+Solution::~Solution() {
+    for (Tour* tour : *tours) {
+        delete tour;
     }
-    cost += instance->get_distance(tour->at(tour_size-1), 0);
-    return cost;
+    delete tours;
+}
+
+int Solution::get_tour_cost(Tour *tour) {
+    return instance->get_tour_cost(tour);
 }
 
 int Solution::get_cost() {

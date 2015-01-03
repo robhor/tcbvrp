@@ -7,15 +7,17 @@ NodeSwapper::NodeSwapper(Solution* solution) {
     num_nodes = currentSolution->instance->demand_nodes.size() * 2;
     i = 0;
     j = 0;
+    swapped = false;
 }
 
 void NodeSwapper::accept() {
-    i = 0;
-    j = 0;
+    swapped = false;
+    // i = 0;
+    // j = 0;
 }
 
 Solution* NodeSwapper::reset() {
-    if (!(i == 0 && j == 0) && j < num_nodes) {
+    if (swapped && j < num_nodes) {
         // currently swapped, swap back
         swap_nodes();
     }
@@ -39,6 +41,7 @@ bool NodeSwapper::increment() {
 }
 
 void NodeSwapper::swap_nodes() {
+    swapped = !swapped;
     int node_i = currentSolution->node_at(i);
     int node_j = currentSolution->node_at(j);
 

@@ -5,6 +5,9 @@
 
 using std::vector;
 
+/// A tour is nothing but a list of nodes, visited in a certain order
+typedef vector<int> Tour;
+
 /**
  * Encapsulates information about a problem instance.
  * Immutable.
@@ -24,6 +27,8 @@ class Instance {
     void set_distance(int from, int to, int distance);
     int get_distance(int from, int to);
     void print_summary();
+    int get_tour_cost(Tour* tour);  /// Get the cost of the given tour
+
 };
 
 
