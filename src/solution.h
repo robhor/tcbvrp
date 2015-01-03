@@ -7,13 +7,12 @@
 
 using std::vector;
 
-/// A tour is nothing but a list of nodes, visited in a certain order
-typedef vector<int> Tour;
-
 /// Represents a solution for a TCBVRP instance
 class Solution {
  public:
     Solution();
+    explicit Solution(Instance* instance);
+    ~Solution();
 
     Instance *instance;    /// The instance this solution belongs to
     int length;            /// Current length of tour

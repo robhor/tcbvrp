@@ -7,6 +7,7 @@
 class NodeSwapper {
     Solution* currentSolution;
     int i, j, num_nodes;
+    bool swapped;
 
     bool increment();   /// Increment i and j, return false no more indices
     void swap_nodes();  /// Swap current nodes i and j
