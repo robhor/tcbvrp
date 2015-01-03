@@ -223,8 +223,6 @@ Solution* randomGreedy(Instance* instance, float alpha) {
     set<int> used_nodes;
     unsigned long num_used_nodes = 0;
 
-    srand(time(0));
-
     while (num_used_nodes < instance->demand_nodes.size() * 2) {
         Tour* tour = buildTour(instance, &used_nodes, alpha);
         num_used_nodes += tour->size();

@@ -28,6 +28,23 @@ void Instance::print_summary() {
     fprintf(stderr, "\n");
 }
 
+int Instance::get_tour_cost(Tour *tour) {
+    int cost = 0;
+    int tour_size = tour->size();
+    if (tour_size == 0) return cost;
+
+    cost += get_distance(0, tour->at(0));
+    for (int i = 0; i < tour_size - 1; i++) {
+        int from = tour->at(i);
+        int to   = tour->at(i+1);
+        int distance = get_distance(from, to);
+        cost += distance;
+    }
+    cost += get_distance(tour->at(tour_size-1), 0);
+    return cost;
+}
+
+
 Instance::~Instance() {
     if (distances != NULL) free(distances);
 }

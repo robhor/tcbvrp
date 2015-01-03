@@ -12,6 +12,7 @@
 #include "./greedy.h"
 #include "./randomGreedy.h"
 #include "./complexMoveHeuristic.h"
+#include "./antColony.h"
 
 static Solution* best_solution;
 static int best_solution_time = 0;
@@ -137,6 +138,13 @@ int main(int argc, char** argv) {
     std::string file = vm["instance"].as<std::string>();
     Instance* instance = ReadInstanceFile(file.c_str());
     instance->print_summary();
+    srand(time(0));
+
+    // FIXME(robhor): Activate through some command line option
+    AntColony* ants = new AntColony(instance);
+    Solution* sol = ants->run();
+    sol->print();
+    return 0;
 
     if (vm.count("timeout")) {
         timeout = vm["timeout"].as<int>();
