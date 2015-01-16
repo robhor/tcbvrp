@@ -89,12 +89,12 @@ void AntColony::daemon_actions() {
 void AntColony::update_pheromones() {
     pheromone_state->evaporate(0.75);
 
-    Solution* best  = best_solution(ant_solutions);
+    //Solution* best  = best_solution(ant_solutions);
     Solution* worst = worst_solution(ant_solutions);
-    int diff = best->length - worst->length;
+    //int diff = best->length - worst->length;
 
     for (auto solution : ant_solutions) {
-        double amount;
+        //double amount;
         // amount = 20 * pow((double)(worst->length - solution->length) / diff, 2);
         // amount *= 100 / solution->length;
         // double amount = 10000.0f / solution->length;

@@ -95,10 +95,11 @@ int Ant::next_demand() {
     return select_node(current_node, candidates);
 }
 
-int Ant::select_node(int current_node, vector<int> candidates) {
+int Ant::select_node(int current_node, vector<int> candidates, int run) {
     Instance *inst = pheromone_state->get_instance();
     vector<double> probabilities;
     double probabilities_sum = 0;
+    int medium_probability = 0;
     for (auto node : candidates) {
         double pheromone_level =
             pheromone_state->get_pheromone_level(current_node, node) + 1;
@@ -112,6 +113,7 @@ int Ant::select_node(int current_node, vector<int> candidates) {
         probabilities.push_back(probability);
         probabilities_sum += probability;
     }
+    medium_probability = probabilities_sum/candidates->length;
 
     double random_number = static_cast<double>(rand_r(&seedp)) / RAND_MAX;
     double p = 0;
@@ -124,6 +126,15 @@ int Ant::select_node(int current_node, vector<int> candidates) {
         } else {
             probability = 1.0f / candidates.size();
         }
+
+
+
+
+        //set probability to 0.005 if it is to low
+        if(probability<0.2*medium_probability&medium_probability>0.015){
+            probability = 0.0005;
+        }
+
 
         p += probability;
         if (random_number <= p) {
