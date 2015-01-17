@@ -22,6 +22,7 @@ class AntColony {
     explicit AntColony(Instance* instance);
     Solution* run();
     int num_ants;
+    int pheromone_model;
 };
 
 #endif  // SRC_ANTCOLONY_H_

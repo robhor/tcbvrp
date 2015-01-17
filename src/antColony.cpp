@@ -14,6 +14,8 @@
 #define NUM_GENERATIONS 100
 #define NUM_DAEMON_ITERATIONS 100
 
+int pheromone_model = 1;
+
 AntColony::AntColony(Instance* instance) {
     this->instance = instance;
     pheromone_state = new PheromoneState(instance);
@@ -58,8 +60,8 @@ Solution* AntColony::run() {
         // Step 2: Optimize their routes
         //daemon_actions(); // included in run_ants
 
-        // Step 3: Update pheromone levels with first model
-        update_pheromones(1);
+        // Step 3: Update pheromone levels
+        update_pheromones(pheromone_model);
 
         Solution* it_best = best_solution(ant_solutions);
         if (best->length == 0 || best->length > it_best->length) {

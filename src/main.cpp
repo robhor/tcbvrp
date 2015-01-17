@@ -114,7 +114,11 @@ int main(int argc, char** argv) {
         ("best-improvement,b", "Use best-improvement instead of first-improvement")
         ("help,h", "Display this help message")
         ("instance,i", po::value<std::string>(), "Instance file")
-        ("version,v", "Display the version number");
+        ("version,v", "Display the version number")
+        ("ant1,a1","Use ant colony heuristic with first pheromone model")
+        ("ant2,a2","Use ant colony heuristic with first pheromone model")
+        ("p=2","Use second pheromone model");
+
 
     po::positional_options_description p;
     p.add("instance", 1);
@@ -141,10 +145,22 @@ int main(int argc, char** argv) {
     srand(time(0));
 
     // FIXME(robhor): Activate through some command line option
-    AntColony* ants = new AntColony(instance);
-    Solution* sol = ants->run();
-    sol->print();
-    return 0;
+    global_start_time = time(0);
+    if(vm.count("ants1")){
+            AntColony* ants = new AntColony(instance);
+            ants->pheromone_model = 1;
+            Solution* sol = ants->run();
+            sol->print();
+        
+    }
+
+    if(vm.count("ants2")){
+            AntColony* ants = new AntColony(instance);
+            ants->pheromone_model = 2;
+            Solution* sol = ants->run();
+            sol->print();
+        
+    }
 
     if (vm.count("timeout")) {
         timeout = vm["timeout"].as<int>();
@@ -169,12 +185,14 @@ int main(int argc, char** argv) {
         best_improvement = true;
     }
 
-    global_start_time = time(0);
+    //global_start_time = time(0);
     if (vm.count("grasp")) {
         grasp(instance);
     } else {
         solve(instance);
     }
+
+
 
     return 0;
 }
