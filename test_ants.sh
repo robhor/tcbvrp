@@ -6,7 +6,7 @@ mkdir -p Results/test_ants/
 make
 
 i=1
-while [ $i -le 15 ] do
+while [ $i -le 15 ]; do
 	for p in 10 30 60 90 120 180 300 400 500; do
 		
 		f=Instances/tcbvrp_$p.prob
