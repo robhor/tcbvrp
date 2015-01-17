@@ -3,14 +3,21 @@
 #include <math.h>
 #include <stdlib.h>
 #include <vector>
+#include <boost/thread.hpp>
+#include <boost/thread/mutex.hpp>
 #include "./ant.h"
 #include "./edgeMoveHeuristic.h"
 #include "./nodeSwapHeuristic.h"
 
+
+#define NUM_ANTS 20
+#define NUM_GENERATIONS 100
+#define NUM_DAEMON_ITERATIONS 100
+
 AntColony::AntColony(Instance* instance) {
     this->instance = instance;
     pheromone_state = new PheromoneState(instance);
-    num_ants = 10;
+    num_ants = NUM_ANTS;
 }
 
 Solution* best_solution(vector<Solution*> solutions) {
@@ -42,15 +49,14 @@ Solution* worst_solution(vector<Solution*> solutions) {
 }
 
 Solution* AntColony::run() {
-    // TODO(robhor): Proper stopping criteria
     Solution* best = new Solution(pheromone_state->get_instance());
 
-    for (int i = 0; i < 2500; i++) {
+    for (int i = 0; i < NUM_GENERATIONS; i++) {
         // Step 1: Let some ants run through the place
         run_ants();
 
         // Step 2: Optimize their routes
-        daemon_actions();
+        //daemon_actions(); // included in run_ants
 
         // Step 3: Update pheromone levels
         update_pheromones();
@@ -59,11 +65,25 @@ Solution* AntColony::run() {
         if (best->length == 0 || best->length > it_best->length) {
             best->set(it_best);
         }
-        fprintf(stderr, "#%i: %i, best: %i\n",
-            i, it_best->length, best->length);
+        fprintf(stderr, "#%i: %i, best: %i\n", i, it_best->length, best->length);
     }
 
     return best;
+}
+
+void optimize_solution(Solution* solution) {
+    int rounds = NUM_DAEMON_ITERATIONS;
+    while (rounds-- > 0 && (nodeSwap(solution) || edgeMove(solution))) {
+        solution->trim();
+    }
+}
+
+void AntColony::run_ant() {
+    Solution* solution = Ant(pheromone_state).run();
+    optimize_solution(solution);
+    mtx.lock();
+    ant_solutions.push_back(solution);
+    mtx.unlock();
 }
 
 void AntColony::run_ants() {
@@ -71,19 +91,19 @@ void AntColony::run_ants() {
         delete solution;
     }
     ant_solutions.clear();
+    boost::thread_group tgroup;
 
     for (int i = 0; i < num_ants; i++) {
-        Solution* solution = Ant(pheromone_state).run();
-        ant_solutions.push_back(solution);
+        tgroup.create_thread(boost::bind(&AntColony::run_ant, this));
     }
+    tgroup.join_all();
 }
-
 void AntColony::daemon_actions() {
+    boost::thread_group tgroup;
     for (Solution* solution : ant_solutions) {
-        while (nodeSwap(solution) || edgeMove(solution)) {
-            solution->trim();
-        }
+        tgroup.create_thread(boost::bind(optimize_solution, solution));
     }
+    tgroup.join_all();
 }
 
 void AntColony::update_pheromones() {
@@ -94,7 +114,7 @@ void AntColony::update_pheromones() {
     int diff = best->length - worst->length;
 
     for (auto solution : ant_solutions) {
-        double amount;
+        // double amount;
         // amount = 20 * pow((double)(worst->length - solution->length) / diff, 2);
         // amount *= 100 / solution->length;
         // double amount = 10000.0f / solution->length;
