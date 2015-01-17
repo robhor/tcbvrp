@@ -146,20 +146,25 @@ int main(int argc, char** argv) {
 
     // FIXME(robhor): Activate through some command line option
     global_start_time = time(0);
-    if(vm.count("ants1")){
+    if(vm.count("ant1")){
             AntColony* ants = new AntColony(instance);
             ants->pheromone_model = 1;
+            time_t start_time = time(0);
             Solution* sol = ants->run();
+            time_t end_time = time(0);
+            double time_in_seconds = difftime(end_time, start_time);
             sol->print();
+            fprintf(stderr, "Time in seconds: %f\n", time_in_seconds);
+            return 0;
         
     }
 
-    if(vm.count("ants2")){
+    if(vm.count("ant1")){
             AntColony* ants = new AntColony(instance);
             ants->pheromone_model = 2;
             Solution* sol = ants->run();
-            sol->print();
-        
+            sol->print(); 
+            return 0;       
     }
 
     if (vm.count("timeout")) {
