@@ -34,9 +34,9 @@ for p in 10 30 60 90 120 180 300 400 500; do
 		stime=$(date +"%T")
 		echo "Run $i started at $stime"
 		before=$(date +%s)
-		./tcbvrp $f > Results/ants_3/$p/try$i.out 2> Results/ants_3/$p/try$i.err
+		./tcbvrp $f > Results/test_ants/$p/try$i.out 2> Results/test_ants/$p/try$i.err
 		after=$(date +%s)
-		echo "Instance $f.. elapsed time:" $((after - $before)) "seconds"	> Results/ants_3/times/time_$p/try_$i.time
+		echo "Instance $f.. elapsed time:" $((after - $before)) "seconds"	> Results/test_ants/times/time_$p/try_$i.time
 		echo "Saved: Instance $f.. elapsed time:" $((after - $before)) "seconds"
 		let i=$i+1	
 	done

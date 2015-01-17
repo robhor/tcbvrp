@@ -115,9 +115,8 @@ int main(int argc, char** argv) {
         ("help,h", "Display this help message")
         ("instance,i", po::value<std::string>(), "Instance file")
         ("version,v", "Display the version number")
-        ("ant1,a1","Use ant colony heuristic with first pheromone model")
-        ("ant2,a2","Use ant colony heuristic with first pheromone model")
-        ("p=2","Use second pheromone model");
+        ("ant1,p","Use ant colony heuristic with first pheromone model")
+        ("ant2,q","Use ant colony heuristic with first pheromone model");
 
 
     po::positional_options_description p;
@@ -147,6 +146,7 @@ int main(int argc, char** argv) {
     // FIXME(robhor): Activate through some command line option
     global_start_time = time(0);
     if(vm.count("ant1")){
+            fprintf(stderr, "%s\n", "using first pheromone model");
             AntColony* ants = new AntColony(instance);
             ants->pheromone_model = 1;
             time_t start_time = time(0);
@@ -159,12 +159,17 @@ int main(int argc, char** argv) {
         
     }
 
-    if(vm.count("ant1")){
+    if(vm.count("ant2")){
+            fprintf(stderr, "%s\n", "using first pheromone model");
             AntColony* ants = new AntColony(instance);
-            ants->pheromone_model = 2;
+            ants->pheromone_model = 1;
+            time_t start_time = time(0);
             Solution* sol = ants->run();
-            sol->print(); 
-            return 0;       
+            time_t end_time = time(0);
+            double time_in_seconds = difftime(end_time, start_time);
+            sol->print();
+            fprintf(stderr, "Time in seconds: %f\n", time_in_seconds);
+            return 0;   
     }
 
     if (vm.count("timeout")) {
