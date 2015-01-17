@@ -14,7 +14,8 @@ class AntColony {
     void run_ants();
     void run_ant();
     void daemon_actions();
-    void update_pheromones();
+    void update_pheromones(int);
+    void update_pheromones_1();
     void update_pheromones_2();
 
  public:

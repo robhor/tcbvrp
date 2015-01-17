@@ -58,8 +58,8 @@ Solution* AntColony::run() {
         // Step 2: Optimize their routes
         //daemon_actions(); // included in run_ants
 
-        // Step 3: Update pheromone levels
-        update_pheromones();
+        // Step 3: Update pheromone levels with first model
+        update_pheromones(1);
 
         Solution* it_best = best_solution(ant_solutions);
         if (best->length == 0 || best->length > it_best->length) {
@@ -130,7 +130,15 @@ void AntColony::update_pheromones() {
     }
 }*/
 
-void AntColony::update_pheromones() {
+void AntColony::update_pheromones(int modelNr){
+    switch(modelNr){
+        case 1: update_pheromones_1(); break;
+        case 2: update_pheromones_2(); break;
+        default:return;
+    }
+}
+
+void AntColony::update_pheromones_1() {
     pheromone_state->evaporate(0.75);
 
     //Solution* best  = best_solution(ant_solutions);
