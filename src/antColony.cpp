@@ -71,7 +71,6 @@ void AntColony::run_ants() {
         delete solution;
     }
     ant_solutions.clear();
-
     for (int i = 0; i < num_ants; i++) {
         Solution* solution = Ant(pheromone_state).run();
         ant_solutions.push_back(solution);

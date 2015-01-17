@@ -15,7 +15,6 @@ static unsigned int seedp = std::time(nullptr);
 
 Ant::Ant(PheromoneState* pheromone_state) {
     this->pheromone_state = pheromone_state;
-
     vector<int> supply_nodes = pheromone_state->get_instance()->supply_nodes;
     vector<int> demand_nodes = pheromone_state->get_instance()->demand_nodes;
 
@@ -56,6 +55,7 @@ Solution* Ant::run() {
 /// Get the next supply node on the ant's walk
 int Ant::next_supply() {
     int current_node;
+    
     if (tour.size() == 0) {
         current_node = 0;
     } else {
@@ -95,7 +95,7 @@ int Ant::next_demand() {
     return select_node(current_node, candidates);
 }
 
-int Ant::select_node(int current_node, vector<int> candidates, int run) {
+int Ant::select_node(int current_node, vector<int> candidates) {
     Instance *inst = pheromone_state->get_instance();
     vector<double> probabilities;
     double probabilities_sum = 0;
@@ -113,7 +113,7 @@ int Ant::select_node(int current_node, vector<int> candidates, int run) {
         probabilities.push_back(probability);
         probabilities_sum += probability;
     }
-    medium_probability = probabilities_sum/candidates->length;
+    medium_probability = probabilities_sum/candidates.size();
 
     double random_number = static_cast<double>(rand_r(&seedp)) / RAND_MAX;
     double p = 0;
@@ -131,7 +131,7 @@ int Ant::select_node(int current_node, vector<int> candidates, int run) {
 
 
         //set probability to 0.005 if it is to low
-        if(probability<0.2*medium_probability&medium_probability>0.015){
+        if(probability<0.2*medium_probability&&medium_probability>0.015){
             probability = 0.0005;
         }
 
