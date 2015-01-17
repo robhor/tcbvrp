@@ -14,7 +14,7 @@ while [ $i -le 15 ]; do
 		mkdir -p Results/test_ants/times/time_$p
 		
 		stime=$(date +"%T")
-		echo "Run $i with pheromone = 1 started at $stime"
+		echo "Run $i instance $p with pheromone = 1 started at $stime"
 		before=$(date +%s)
 		./tcbvrp --ant1 $f > Results/test_ants/$p/try$i.out 2> Results/test_ants/$p/try$i.err
 		after=$(date +%s)
@@ -22,12 +22,12 @@ while [ $i -le 15 ]; do
 		echo "Saved: Instance $f with pheromone = 1 .. elapsed time:" $((after - $before)) "seconds"
 
 		stime=$(date +"%T")
-		echo "Run $i with pheromone = 2 started at $stime"
+		echo "Run $i instance $p with pheromone = 2 started at $stime"
 		before=$(date +%s)
 		./tcbvrp --ant2 $f > Results/test_ants/$p/try$i.out 2> Results/test_ants/$p/try$i.err
 		after=$(date +%s)
-		echo "Instance $f with pheromone = 2 .. elapsed time:" $((after - $before)) "seconds"	> Results/test_ants/times/time_$p/try_$i_ph_2.time
-		echo "Saved: Instance $f with pheromoe = 2 .. elapsed time:" $((after - $before)) "seconds"
+		echo "Instance $f instance $ with pheromone = 2 .. elapsed time:" $((after - $before)) "seconds"	> Results/test_ants/times/time_$p/try_$i_ph_2.time
+		echo "Saved: Instance $f with pheromone = 2 .. elapsed time:" $((after - $before)) "seconds"
 	done
 	((i++))
 done
