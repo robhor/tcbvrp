@@ -1,5 +1,6 @@
 // Copyright 2015 Robert Horvath, Johannes Vogel
 #include <stdlib.h>
+#include <math.h>
 #include "./pheromoneState.h"
 
 PheromoneState::PheromoneState(Instance* instance) {
@@ -29,5 +30,14 @@ void PheromoneState::evaporate(double factor) {
     int nodes = instance->num_nodes + 1;
     for (int i = 0; i < nodes * nodes; i++) {
         pheromoneLevels[i] *= factor;
+    }
+}
+void PheromoneState::evaporate2(double factor){
+    int nodes = instance->num_nodes + 1;
+    for (int i = 0; i < nodes * nodes; i++) {
+        double level = pheromoneLevels[i];
+        level*=factor;
+        level += level*pow(factor,3.5);
+        pheromoneLevels[i]=level;
     }
 }

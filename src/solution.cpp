@@ -2,6 +2,7 @@
 #include "./solution.h"
 #include <stdio.h>
 #include <vector>
+#include <algorithm>
 
 Solution::Solution() {
     length = 0;

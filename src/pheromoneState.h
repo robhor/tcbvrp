@@ -13,6 +13,7 @@ class PheromoneState {
     double get_pheromone_level(int from, int to);
     void increase_pheromone_level(int from, int to, double amount);
     void evaporate(double factor);
+    void evaporate2(double factor);
 };
 
 #endif  // SRC_PHEROMONESTATE_H_

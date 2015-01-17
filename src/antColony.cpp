@@ -105,13 +105,13 @@ void AntColony::daemon_actions() {
     }
     tgroup.join_all();
 }
-
+/*
 void AntColony::update_pheromones() {
     pheromone_state->evaporate(0.75);
 
     Solution* best  = best_solution(ant_solutions);
     Solution* worst = worst_solution(ant_solutions);
-    int diff = best->length - worst->length;
+    //int diff = best->length - worst->length;
 
     for (auto solution : ant_solutions) {
         // double amount;
@@ -120,6 +120,54 @@ void AntColony::update_pheromones() {
         // double amount = 10000.0f / solution->length;
         PheromoneState* ps = pheromone_state;
         double amount = 10 * worst->length / solution->length;
+        for (auto t : *solution->tours) {
+            ps->increase_pheromone_level(0, t->at(0), amount);
+            ps->increase_pheromone_level(t->back(), 0, amount);
+            for (size_t i = 0; i < t->size()-1; i++) {
+                ps->increase_pheromone_level(t->at(i), t->at(i+1), amount);
+            }
+        }
+    }
+}*/
+
+void AntColony::update_pheromones() {
+    pheromone_state->evaporate(0.75);
+
+    //Solution* best  = best_solution(ant_solutions);
+    Solution* worst = worst_solution(ant_solutions);
+    //int diff = best->length - worst->length;
+
+    for (auto solution : ant_solutions) {
+        // double amount;
+        // amount = 20 * pow((double)(worst->length - solution->length) / diff, 2);
+        // amount *= 100 / solution->length;
+        // double amount = 10000.0f / solution->length;
+        PheromoneState* ps = pheromone_state;
+        double amount = 10 * worst->length / solution->length;
+        for (auto t : *solution->tours) {
+            ps->increase_pheromone_level(0, t->at(0), amount);
+            ps->increase_pheromone_level(t->back(), 0, amount);
+            for (size_t i = 0; i < t->size()-1; i++) {
+                ps->increase_pheromone_level(t->at(i), t->at(i+1), amount);
+            }
+        }
+    }
+}
+void AntColony::update_pheromones_2(){
+    pheromone_state->evaporate(0.75);
+
+    Solution* best  = best_solution(ant_solutions);
+    Solution* worst = worst_solution(ant_solutions);
+    int diff = best->length - worst->length;
+
+    for (auto solution : ant_solutions) {
+        // double amount;
+        double amount = 20 * pow((double)(worst->length - solution->length) / diff,2.5);
+        amount += pow(diff,1/5);
+        // amount *= 100 / solution->length;
+        // double amount = 10000.0f / solution->length;
+        PheromoneState* ps = pheromone_state;
+        //double amount = 10 * worst->length / solution->length;
         for (auto t : *solution->tours) {
             ps->increase_pheromone_level(0, t->at(0), amount);
             ps->increase_pheromone_level(t->back(), 0, amount);

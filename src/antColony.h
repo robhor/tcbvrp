@@ -15,6 +15,7 @@ class AntColony {
     void run_ant();
     void daemon_actions();
     void update_pheromones();
+    void update_pheromones_2();
 
  public:
     explicit AntColony(Instance* instance);
